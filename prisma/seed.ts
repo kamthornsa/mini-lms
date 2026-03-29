@@ -8,7 +8,7 @@ const prisma = new PrismaClient({ adapter })
 
 async function main() {
   const username = "kamthorn"
-  const password = "@1234"
+  const password = "kt20%ll."
 
   const exists = await prisma.teacher.findUnique({ where: { email: username } })
   if (exists) {
