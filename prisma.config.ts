@@ -5,7 +5,9 @@ import { defineConfig } from "prisma/config";
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
+
   migrations: {
+    seed: 'ts-node prisma/seed.ts',  // หรือ node ถ้าเป็น .js
     path: "prisma/migrations",
   },
   datasource: {
