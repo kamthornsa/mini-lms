@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Teacher {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password_hash String
+  full_name     String
+  created_at    DateTime @default(now())
+}
+
+model Student {
+  id         String   @id @default(uuid())
+  student_id String   @unique
+  full_name  String
+  created_at DateTime @default(now())
+
+  submissions Submission[]
+  sections    StudentSection[]
+  quizAttempts QuizAttempt[]
+}
+
+model Section {
+  id    Int    @id @default(autoincrement())
+  name  String
+
+  students StudentSection[]
+  courses  SectionCourse[]
+}
+
+model StudentSection {
+  id         Int @id @default(autoincrement())
+  studentId  String
+  sectionId  Int
+
+  student Student @relation(fields: [studentId], references: [id])
+  section Section @relation(fields: [sectionId], references: [id])
+}
+
+model Course {
+  id          Int    @id @default(autoincrement())
+  title       String
+  slug        String @unique
+  description String?
+
+  lessons Lesson[]
+  sections SectionCourse[]
+}
+
+model SectionCourse {
+  id        Int @id @default(autoincrement())
+  sectionId Int
+  courseId  Int
+
+  section Section @relation(fields: [sectionId], references: [id])
+  course  Course  @relation(fields: [courseId], references: [id])
+}
+
+model Lesson {
+  id          Int    @id @default(autoincrement())
+  courseId    Int
+  title       String
+  slug        String
+  content     String
+  youtube_id  String?
+  order_index Int
+
+  course Course @relation(fields: [courseId], references: [id])
+  assignments Assignment[]
+  lessonQuizzes LessonQuiz[]
+}
+
+model Assignment {
+  id          Int    @id @default(autoincrement())
+  lessonId    Int
+  title       String
+  description String?
+
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+  submissions Submission[]
+}
+
+model Submission {
+  id           Int      @id @default(autoincrement())
+  studentId    String
+  assignmentId Int
+  link_url     String
+  created_at   DateTime @default(now())
+
+  student    Student    @relation(fields: [studentId], references: [id])
+  assignment Assignment @relation(fields: [assignmentId], references: [id])
+}
+
+// ─────────────────────────────────────────
+// Quiz System
+// ─────────────────────────────────────────
+
+model Quiz {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String?
+  max_attempts Int?     // null = ไม่จำกัด
+  created_at   DateTime @default(now())
+
+  questions     QuizQuestion[]
+  lessonQuizzes LessonQuiz[]
+  attempts      QuizAttempt[]
+}
+
+model QuizQuestion {
+  id          Int    @id @default(autoincrement())
+  quizId      Int
+  question    String
+  order_index Int    @default(0)
+  points      Int    @default(1)
+
+  quiz    Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  choices QuizChoice[]
+  answers QuizAnswer[]
+}
+
+model QuizChoice {
+  id          Int     @id @default(autoincrement())
+  questionId  Int
+  text        String
+  is_correct  Boolean @default(false)
+  order_index Int     @default(0)
+
+  question QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answers  QuizAnswer[]
+}
+
+// Junction: เชื่อม Quiz กับ Lesson (1 lesson มีได้หลาย quiz, 1 quiz ใช้ซ้ำได้)
+model LessonQuiz {
+  id          Int @id @default(autoincrement())
+  lessonId    Int
+  quizId      Int
+  order_index Int @default(0)
+
+  lesson Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  quiz   Quiz   @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@unique([lessonId, quizId])
+}
+
+// การทำแบบทดสอบแต่ละครั้งของนักเรียน
+model QuizAttempt {
+  id           Int       @id @default(autoincrement())
+  quizId       Int
+  studentId    String
+  attempt_no   Int       @default(1) // ครั้งที่ทำ (1, 2, 3, ...)
+  score        Int?      // คะแนนที่ได้
+  total_points Int?      // คะแนนเต็ม
+  submitted_at DateTime?
+  started_at   DateTime  @default(now())
+
+  quiz    Quiz        @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  student Student     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  answers QuizAnswer[]
+
+  @@unique([quizId, studentId, attempt_no])
+}
+
+// คำตอบของนักเรียนใน attempt นั้น
+model QuizAnswer {
+  id         Int @id @default(autoincrement())
+  attemptId  Int
+  questionId Int
+  choiceId   Int
+
+  attempt  QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  question QuizQuestion @relation(fields: [questionId], references: [id])
+  choice   QuizChoice   @relation(fields: [choiceId], references: [id])
+
+  @@unique([attemptId, questionId])
+}

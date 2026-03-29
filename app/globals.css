@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -126,4 +127,39 @@
   html {
     @apply font-sans;
   }
+}
+/* ── rehype-pretty-code overrides (code blocks styling) ── */
+.prose pre {
+  padding: 0;
+  background: none;
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+.prose pre > code {
+  display: grid;
+  padding: 1rem 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  counter-reset: line;
+}
+.prose pre > code [data-line] {
+  padding: 0 1.25rem;
+}
+.prose [data-highlighted-line] {
+  background-color: rgba(255,255,255,0.08);
+  border-left: 2px solid #7ee787;
+  padding-left: calc(1.25rem - 2px);
+}
+.prose [data-rehype-pretty-code-title] {
+  font-size: 0.75rem;
+  font-family: var(--font-mono, monospace);
+  padding: 0.4rem 1rem;
+  background-color: hsl(var(--muted));
+  border: 1px solid hsl(var(--border) / 0.5);
+  border-bottom: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  color: hsl(var(--muted-foreground));
+}
+.prose [data-rehype-pretty-code-title] + pre {
+  border-radius: 0 0 0.5rem 0.5rem;
+  margin-top: 0;
 }
