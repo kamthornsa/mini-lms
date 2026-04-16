@@ -1,7 +1,21 @@
+import type { Metadata } from "next";
 import { prisma } from "@/lib/prisma";
 import { getStudentSession } from "@/lib/student-session";
 import { CourseSidebar } from "./_components/course-sidebar";
 import { ScrollToTopButton } from "./_components/scroll-to-top";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const course = await prisma.course.findUnique({
+    where: { slug },
+    select: { title: true },
+  });
+  return { title: course?.title ?? "Course" };
+}
 
 export default async function CourseLayout({
   children,
