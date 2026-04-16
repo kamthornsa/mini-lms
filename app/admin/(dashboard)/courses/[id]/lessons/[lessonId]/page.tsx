@@ -170,11 +170,20 @@ export default async function LessonEditorPage({
                       />
                       <textarea
                         name="description"
-                        className="w-full px-3 py-2 text-sm border rounded-md bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
-                        rows={2}
+                        className="w-full px-3 py-2 text-sm border rounded-md bg-background resize-y font-mono focus:outline-none focus:ring-2 focus:ring-ring"
+                        rows={3}
                         defaultValue={a.description ?? ""}
-                        placeholder="คำอธิบาย (ไม่บังคับ)"
+                        placeholder="คำอธิบาย (รองรับ Markdown และ HTML เช่น - ข้อย่อย, **ตัวหนา**, <b>bold</b>)"
                       />
+                      <p className="text-xs text-muted-foreground">
+                        รองรับ Markdown (<code>- รายการ</code>,{" "}
+                        <code>**ตัวหนา**</code>) และ HTML (
+                        <code>&lt;br&gt;</code>,{" "}
+                        <code>
+                          &lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;
+                        </code>
+                        )
+                      </p>
                       <div className="flex justify-start">
                         <Button type="submit" size="sm" variant="outline">
                           <Pencil size={14} className="mr-1" /> บันทึก
@@ -205,10 +214,15 @@ export default async function LessonEditorPage({
             <Input name="title" placeholder="ชื่อ Assignment *" required />
             <textarea
               name="description"
-              className="w-full px-3 py-2 text-sm border rounded-md bg-background resize-y focus:outline-none focus:ring-2 focus:ring-ring"
-              rows={2}
-              placeholder="คำอธิบาย (ไม่บังคับ)"
+              className="w-full px-3 py-2 text-sm border rounded-md bg-background resize-y font-mono focus:outline-none focus:ring-2 focus:ring-ring"
+              rows={3}
+              placeholder="คำอธิบาย (รองรับ Markdown และ HTML เช่น - ข้อย่อย, **ตัวหนา**, <b>bold</b>)"
             />
+            <p className="text-xs text-muted-foreground">
+              รองรับ Markdown (<code>- รายการ</code>, <code>**ตัวหนา**</code>)
+              และ HTML (<code>&lt;br&gt;</code>,{" "}
+              <code>&lt;ul&gt;&lt;li&gt;...&lt;/li&gt;&lt;/ul&gt;</code>)
+            </p>
             <div className="flex justify-end">
               <Button type="submit" size="sm">
                 <Plus size={14} className="mr-1" /> เพิ่ม Assignment

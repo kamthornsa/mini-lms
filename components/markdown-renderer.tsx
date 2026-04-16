@@ -6,7 +6,13 @@ import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeStringify from "rehype-stringify";
 
-export async function MarkdownRenderer({ content }: { content: string }) {
+export async function MarkdownRenderer({
+  content,
+  className,
+}: {
+  content: string;
+  className?: string;
+}) {
   const file = await unified()
     .use(remarkParse)
     .use(remarkGfm)
@@ -23,7 +29,7 @@ export async function MarkdownRenderer({ content }: { content: string }) {
 
   return (
     <div
-      className="prose prose-slate max-w-none dark:prose-invert"
+      className={className ?? "prose prose-slate max-w-none dark:prose-invert"}
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );

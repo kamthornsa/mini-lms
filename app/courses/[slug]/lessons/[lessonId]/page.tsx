@@ -97,9 +97,12 @@ export default async function LessonPage({
                   >
                     <h3 className="font-medium mb-1">{a.title}</h3>
                     {a.description && (
-                      <p className="text-sm text-muted-foreground mb-3">
-                        {a.description}
-                      </p>
+                      <div className="mb-3">
+                        <MarkdownRenderer
+                          content={a.description}
+                          className="prose prose-sm prose-slate max-w-none dark:prose-invert text-muted-foreground"
+                        />
+                      </div>
                     )}
                     {submission && (
                       <p className="text-xs text-muted-foreground mb-2">
