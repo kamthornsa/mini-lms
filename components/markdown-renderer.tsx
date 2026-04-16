@@ -2,6 +2,7 @@
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
 import remarkRehype from "remark-rehype";
+import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeStringify from "rehype-stringify";
 
@@ -10,6 +11,7 @@ export async function MarkdownRenderer({ content }: { content: string }) {
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkRehype, { allowDangerousHtml: true })
+    .use(rehypeSlug)
     .use(rehypePrettyCode, {
       theme: "github-dark-dimmed",
       keepBackground: true,
