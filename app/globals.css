@@ -128,6 +128,22 @@
     @apply font-sans;
   }
 }
+/* ── Inline code styling ── */
+.prose :not(pre) > code {
+  background-color: hsl(var(--muted));
+  color: oklch(0.55 0.18 250);
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.25rem;
+  padding: 0.1em 0.4em;
+  font-size: 0.875em;
+  font-weight: 500;
+}
+.dark .prose :not(pre) > code {
+  background-color: oklch(0.22 0 0);
+  color: oklch(0.78 0.14 250);
+  border-color: oklch(1 0 0 / 15%);
+}
+
 /* ── rehype-pretty-code overrides (code blocks styling) ── */
 .prose pre {
   padding: 0;
