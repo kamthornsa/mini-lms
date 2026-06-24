@@ -128,6 +128,35 @@
     @apply font-sans;
   }
 }
+
+/* Fix rehype-pretty-code blocks inside prose */
+.prose pre[data-theme],
+.prose pre {
+  background-color: unset !important;
+  color: unset !important;
+  padding: 0 !important;
+}
+
+.prose figure[data-rehype-pretty-code-figure] pre {
+  background-color: revert !important;
+  color: revert !important;
+  padding: 1rem 1.5rem !important;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.prose figure[data-rehype-pretty-code-figure] code {
+  background-color: transparent !important;
+  color: inherit !important;
+  font-size: 0.875rem;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+.prose figure[data-rehype-pretty-code-figure] code::before,
+.prose figure[data-rehype-pretty-code-figure] code::after {
+  content: none !important;
+}
 /* ── Inline code styling ── */
 .prose :not(pre) > code {
   background-color: hsl(var(--muted));
