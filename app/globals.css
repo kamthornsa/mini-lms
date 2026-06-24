@@ -132,14 +132,16 @@
 /* Fix rehype-pretty-code blocks inside prose */
 .prose pre[data-theme],
 .prose pre {
-  background-color: unset !important;
-  color: unset !important;
-  padding: 0 !important;
+  background-color: #1e2030 !important;
+  color: #c8d3f5 !important;
+  padding: 1rem 1.5rem !important;
+  border-radius: 0.5rem;
+  overflow-x: auto;
 }
 
 .prose figure[data-rehype-pretty-code-figure] pre {
-  background-color: revert !important;
-  color: revert !important;
+  background-color: #1e2030 !important;
+  color: #c8d3f5 !important;
   padding: 1rem 1.5rem !important;
   border-radius: 0.5rem;
   overflow-x: auto;
